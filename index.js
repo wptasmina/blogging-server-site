@@ -39,6 +39,12 @@ async function run() {
 
     app.get('/blog', async(req, res)=>{
       const result = await blogUserCollection.find().sort({_id: -1}).toArray();
+      // const result = await blogUserCollection.find().toArray();
+      res.send(result)
+    })
+
+    app.get('/homeblog', async(req, res)=>{
+      const result = await blogUserCollection.find().limit(6).toArray();
       res.send(result)
     })
  
@@ -59,7 +65,7 @@ app.get('/',(req,res)=>{
 })
 
 app.listen(port, ()=>{
-    console.log('Server running...')
+    console.log('Server is running...')
 })
 
 // http://localhost:5000/
