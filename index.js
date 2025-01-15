@@ -28,6 +28,8 @@ async function run() {
     await client.connect();
 
     const blogUserCollection = client.db("blog-discover").collection("blogger");
+    const wishListCollection = client.db("blog-discover").collection("wishList");
+    const commentCollection = client.db("blog-discover").collection("comment");
 
     //add blogs get
     app.get('/blog', async(req, res)=>{
@@ -48,16 +50,6 @@ async function run() {
     res.status(201).send(result);
   });
 
-
-  // Delete
-  app.delete("/deleteBlog/:id",async (req, res)=> {
-    const id = req.params.id;
-    const query = {_id: new ObjectId(id)}
-    const result = await blogUserCollection.deleteOne(query)
-    res.send(result)
-  })
-
-
 // Get  details blog
 app.get('/details/:id', async (req, res) => {
   const id = req.params.id;
@@ -68,39 +60,6 @@ app.get('/details/:id', async (req, res) => {
   
 
 
-// Add comment
-app.post('/comments', async (req, res) => {
-  try {
-    const { blogId, userName, text } = req.body;
-
-    if (!blogId || !userName || !text) {
-      return res.status(400).json({ message: 'Missing required fields' });
-    }
-
-    const comment = new Comment(req.body);
-    await comment.save();
-    res.status(201).json(comment);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Error adding comment' });
-  }
-});
-
-// Get comments for a blog
-// app.get('/comments/:blogId', async (req, res) => {
-//   try {
-//     const { blogId } = req.params;
-//     if (!isValidObjectId(blogId)) {
-//       return res.status(400).json({ message: 'Invalid Blog ID' });
-//     }
-
-//     const comments = await Comment.find({ blogId });
-//     res.json(comments);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: 'Error fetching comments' });
-//   }
-// });
 
     // const Blog = require('../models/Blog');
     // const Comment = require('../models/Comment');
@@ -110,20 +69,37 @@ app.post('/comments', async (req, res) => {
     //   const blog = await Blog.findById(req.params.id);
     //   res.json(blog);
     // });
+
     
     // // Add comment
-    // router.post('/comments', async (req, res) => {
-    //   const comment = new Comment(req.body);
+    // app.post('/comments', async (req, res) => {
+    //   const comment = new commentCollection(req.body);
     //   await comment.save();
     //   res.json(comment);
     // });
     
-    // // // Get comments for a blog
-    // router.get('/comments/:blogId', async (req, res) => {
-    //   const comments = await Comment.find({ blogId: req.params.blogId });
+    // // // // Get comments for a blog
+    // app.get('/comments/:id', async (req, res) => {
+    //   const comments = await commentCollection.find({ blogId: req.params.blogId });
     //   res.json(comments);
     // });
     
+// Add Comment
+app.post("/comments", async (req, res) => {
+  const commentData = req.body;
+  const result = await commentCollection.insertOne(commentData);
+  res.send(result);
+});
+
+// Get Comments by Blog ID
+app.get("/comments", async (req, res) => {
+  const { blogId } = req.query;
+  const result = await commentCollection.find({ blogId }).toArray();
+  res.send(result);
+});
+
+
+
 
      // update page
     app.get('/blog/:id', async(req, res)=>{
@@ -159,24 +135,33 @@ app.post('/comments', async (req, res) => {
     })
 // update page End
 
-    //wishlist page
-    app.get('/wishlist/:id', async(req, res)=>{
-      const id = req.params.id;
-      const query = {_id: new ObjectId(id)}
-      const result = await blogUserCollection.findOne(query)
-      res.send(result)
-      console.log(result)
 
+  // Delete
+  app.delete("/deleteBlog/:id",async (req, res)=> {
+    const id = req.params.id;
+    const query = {_id: new ObjectId(id)}
+    const result = await blogUserCollection.deleteOne(query)
+    res.send(result)
+  })
+
+
+//wishList
+    app.get('/myWishList', async (req, res) => {
+      const email = req.query.email;
+      const query = { email: email }
+      const result = await wishListCollection.find(query).toArray();
+      res.send(result)
     })
+
     app.get('/wishlist', async(req, res)=>{
-      const result = await blogUserCollection.find().toArray();
+      const result = await wishListCollection.find().toArray();
       res.send(result)
 
     })
 
     app.post('/wishlist', async (req, res) => {
-      const newAddBlog = req.body;
-      const result = await blogUserCollection.insertOne(newAddBlog)
+      const blog = req.body;
+      const result = await wishListCollection.insertOne(blog)
       res.status(201).send(result);
     });
  //wishlist page End
