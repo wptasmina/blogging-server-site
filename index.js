@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 require("dotenv").config()
 
+
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express();
 
@@ -59,46 +60,18 @@ app.get('/details/:id', async (req, res) => {
   });
   
 
-
-
-    // const Blog = require('../models/Blog');
-    // const Comment = require('../models/Comment');
-    
-    // // Get blog details
-    // router.get('/details/:id', async (req, res) => {
-    //   const blog = await Blog.findById(req.params.id);
-    //   res.json(blog);
-    // });
-
-    
-    // // Add comment
-    // app.post('/comments', async (req, res) => {
-    //   const comment = new commentCollection(req.body);
-    //   await comment.save();
-    //   res.json(comment);
-    // });
-    
-    // // // // Get comments for a blog
-    // app.get('/comments/:id', async (req, res) => {
-    //   const comments = await commentCollection.find({ blogId: req.params.blogId });
-    //   res.json(comments);
-    // });
-    
-// Add Comment
+// // Add Comment
 app.post("/comments", async (req, res) => {
   const commentData = req.body;
   const result = await commentCollection.insertOne(commentData);
   res.send(result);
 });
 
-// Get Comments by Blog ID
-app.get("/comments", async (req, res) => {
-  const { blogId } = req.query;
+app.get("/comments/:blogId", async (req, res) => {
+  const blogId = req.params.blogId;
   const result = await commentCollection.find({ blogId }).toArray();
   res.send(result);
 });
-
-
 
 
      // update page
