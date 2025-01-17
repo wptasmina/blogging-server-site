@@ -26,7 +26,7 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    await client.connect();
+    // await client.connect();
 
     const blogUserCollection = client.db("blog-discover").collection("blogger");
     const wishListCollection = client.db("blog-discover").collection("wishList");
@@ -35,7 +35,6 @@ async function run() {
     //add blogs get
     app.get('/blog', async(req, res)=>{
       const result = await blogUserCollection.find().sort({_id: -1}).toArray();
-      // const result = await blogUserCollection.find().toArray();
       res.send(result)
     })
 
