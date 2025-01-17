@@ -110,12 +110,12 @@ app.get("/comments/:blogId", async (req, res) => {
 
 
   // Delete
-  app.delete("/deleteBlog/:id",async (req, res)=> {
+  app.delete("/deleteBlog/:id", async (req, res) => {
     const id = req.params.id;
-    const query = {_id: new ObjectId(id)}
-    const result = await blogUserCollection.deleteOne(query)
-    res.send(result)
-  })
+    const query = { _id: new ObjectId(id) };
+    const result = await wishListCollection.deleteOne(query);
+    res.send(result);
+  });
 
 
 //wishList
@@ -140,12 +140,6 @@ app.get("/comments/:blogId", async (req, res) => {
  //wishlist page End
  
   
-
-
-
-
-
-    // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
@@ -164,7 +158,6 @@ app.listen(port, ()=>{
     console.log('Server is running...')
 })
 
-// http://localhost:5000/
 
 
 
