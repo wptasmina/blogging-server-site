@@ -33,13 +33,11 @@ async function run() {
     const commentCollection = client.db("blog-discover").collection("comment");
     const reviewCollection = client.db("blog-discover").collection("reviews");
 
-
     // MongoDB theke reviews fetch kortese
     app.get('/review', async (req, res) => {
       const result = await reviewCollection.find().toArray();
       res.send(result);
     });
-
 
     //add blogs get
     app.get('/blog', async (req, res) => {
