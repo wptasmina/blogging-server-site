@@ -34,100 +34,99 @@ async function run() {
     const reviewCollection = client.db("blog-discover").collection("rating");
 
 
-    // Review 
-       app.get('/review', async(req, res)=>{
-        const result = await reviewCollection.find().toArray();
-        res.send(result)
-      })
-  
+    // MongoDB theke reviews fetch kortese
+    app.get('/reviews', async (req, res) => {
+      const result = await reviewCollection.find().toArray();
+      res.send(result);
+    });
 
 
     //add blogs get
-    app.get('/blog', async(req, res)=>{
-      const result = await blogUserCollection.find().sort({_id: -1}).toArray();
+    app.get('/blog', async (req, res) => {
+      const result = await blogUserCollection.find().sort({ _id: -1 }).toArray();
       res.send(result)
     })
 
-    app.get('/homeblog', async(req, res)=>{
-      const result = await blogUserCollection.find().limit(6).sort({_id: -1}).toArray();
+    app.get('/homeblog', async (req, res) => {
+      const result = await blogUserCollection.find().limit(6).sort({ _id: -1 }).toArray();
       res.send(result)
     })
 
-  //add blogs post
-  app.post('/blogger', async(req, res)=>{
-    const newAddBlog = req.body;
-    const result = await blogUserCollection.insertOne(newAddBlog)
-    res.status(201).send(result);
-  });
+    //add blogs post
+    app.post('/blogger', async (req, res) => {
+      const newAddBlog = req.body;
+      const result = await blogUserCollection.insertOne(newAddBlog)
+      res.status(201).send(result);
+    });
 
-// Get  details blog
-app.get('/details/:id', async (req, res) => {
-  const id = req.params.id;
-  const query = {_id: new ObjectId(id)}
-  const result = await blogUserCollection.findOne(query)
-  res.send(result)
-  });
-  
-
-// // Add Comment
-app.post("/comments", async (req, res) => {
-  const commentData = req.body;
-  const result = await commentCollection.insertOne(commentData);
-  res.send(result);
-});
-
-app.get("/comments/:blogId", async (req, res) => {
-  const blogId = req.params.blogId;
-  const result = await commentCollection.find({ blogId }).toArray();
-  res.send(result);
-});
-
-
-     // update page
-    app.get('/blog/:id', async(req, res)=>{
+    // Get  details blog
+    app.get('/details/:id', async (req, res) => {
       const id = req.params.id;
-      const query = {_id: new ObjectId(id)}
+      const query = { _id: new ObjectId(id) }
+      const result = await blogUserCollection.findOne(query)
+      res.send(result)
+    });
+
+
+    // // Add Comment
+    app.post("/comments", async (req, res) => {
+      const commentData = req.body;
+      const result = await commentCollection.insertOne(commentData);
+      res.send(result);
+    });
+
+    app.get("/comments/:blogId", async (req, res) => {
+      const blogId = req.params.blogId;
+      const result = await commentCollection.find({ blogId }).toArray();
+      res.send(result);
+    });
+
+
+    // update page
+    app.get('/blog/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) }
       const result = await blogUserCollection.findOne(query)
       res.send(result)
       console.log(result)
 
     });
 
-    app.put('/blog/:id', async(req, res) => {
+    app.put('/blog/:id', async (req, res) => {
       const id = req.params.id;
-      const filter = {_id: new ObjectId(id)}
+      const filter = { _id: new ObjectId(id) }
       const options = { upsert: true };
       const updateBlog = req.body;
       const updates = {
         $set: {
-          userName: updateBlog.userName, 
-          email: updateBlog.email, 
-          userImage: updateBlog.userImage, 
-          title: updateBlog.title, 
-          imageUrl: updateBlog.imageUrl, 
-          date: updateBlog.date, 
-          shortDesc: updateBlog.shortDesc, 
-          longDesc: updateBlog.longDesc, 
+          userName: updateBlog.userName,
+          email: updateBlog.email,
+          userImage: updateBlog.userImage,
+          title: updateBlog.title,
+          imageUrl: updateBlog.imageUrl,
+          date: updateBlog.date,
+          shortDesc: updateBlog.shortDesc,
+          longDesc: updateBlog.longDesc,
           category: updateBlog.category
         }
       }
 
-      const result = await blogUserCollection.updateOne(filter, updates, options )
+      const result = await blogUserCollection.updateOne(filter, updates, options)
       res.send(result)
     })
-// update page End
+    // update page End
 
 
-  // Delete
-  app.delete("/deleteBlog/:id", async (req, res) => {
-    const id = req.params.id;
-    const query = { _id: new ObjectId(id) };
-    const result = await wishListCollection.deleteOne(query);
-    res.send(result);
-  });
+    // Delete
+    app.delete("/deleteBlog/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await wishListCollection.deleteOne(query);
+      res.send(result);
+    });
 
 
-//wishList
+    //wishList
     app.get('/myWishList', async (req, res) => {
       const email = req.query.email;
       const query = { email: email }
@@ -135,7 +134,7 @@ app.get("/comments/:blogId", async (req, res) => {
       res.send(result)
     })
 
-    app.get('/wishlist', async(req, res)=>{
+    app.get('/wishlist', async (req, res) => {
       const result = await wishListCollection.find().toArray();
       res.send(result)
 
@@ -146,9 +145,9 @@ app.get("/comments/:blogId", async (req, res) => {
       const result = await wishListCollection.insertOne(blog)
       res.status(201).send(result);
     });
- //wishlist page End
- 
-  
+    //wishlist page End
+
+
     // await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
@@ -159,12 +158,12 @@ app.get("/comments/:blogId", async (req, res) => {
 run().catch(console.dir);
 
 
-app.get('/',(req,res)=>{
-    res.send("Blog Site")
+app.get('/', (req, res) => {
+  res.send("Blog Site")
 })
 
-app.listen(port, ()=>{
-    console.log('Server is running...')
+app.listen(port, () => {
+  console.log('Server is running...')
 })
 
 
