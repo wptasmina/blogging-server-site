@@ -26,11 +26,21 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    // await client.connect();
+    await client.connect();
 
     const blogUserCollection = client.db("blog-discover").collection("blogger");
     const wishListCollection = client.db("blog-discover").collection("wishList");
     const commentCollection = client.db("blog-discover").collection("comment");
+    const reviewCollection = client.db("blog-discover").collection("rating");
+
+
+    // Review 
+       app.get('/review', async(req, res)=>{
+        const result = await reviewCollection.find().toArray();
+        res.send(result)
+      })
+  
+
 
     //add blogs get
     app.get('/blog', async(req, res)=>{
