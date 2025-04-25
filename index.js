@@ -12,8 +12,13 @@ const port = process.env.PORT || 5000
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster-1.fmah5.mongodb.net/?retryWrites=true&w=majority&appName=Cluster-1`;
 
 //middleware
+app.use(cors({
+  origin: 'https://galaxy-blogger.netlify.app', // your frontend URL
+  credentials: true,
+}));
+
 app.use(express.json())
-app.use(cors());
+// app.use(cors());
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
