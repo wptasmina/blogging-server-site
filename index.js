@@ -12,14 +12,12 @@ const port = process.env.PORT || 5000
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster-1.fmah5.mongodb.net/?retryWrites=true&w=majority&appName=Cluster-1`;
 
 //middleware
-app.use(cors({
-  origin: 'https://galaxy-blogger.netlify.app', // your frontend URL
-  credentials: true,
-}));
+// app.use(cors({
+//   origin: 'https://galaxy-blogger.netlify.app', // your frontend URL
+//   credentials: true,
+// }));
 
-app.use(express.json())
-// app.use(cors());
-
+// ✅ CORS Setup (for both localhost and Netlify frontend)
 const corsOptions = {
   origin: [
     "http://localhost:5173",
@@ -28,9 +26,12 @@ const corsOptions = {
   credentials: true,
   optionsSuccessStatus: 200,
 };
+app.use(cors(corsOptions));
+
+app.use(express.json());
+// ✅ Parse incoming JSON
 
 // app.use(cors());
-// app.use(express.json());
 // app.use(cookieParser());
 
 
