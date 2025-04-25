@@ -18,11 +18,11 @@ app.use(cors());
 const corsOptions = {
   origin: [
     "http://localhost:5173",
+    "https://galaxy-blogger.netlify.app"
   ],
   credentials: true,
   optionsSuccessStatus: 200,
 };
-
 
 // app.use(cors());
 // app.use(express.json());
