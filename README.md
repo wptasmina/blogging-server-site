@@ -1,4 +1,3 @@
-server site run: nodemon index.js <br/>
 
 
 # 🛠️ Galaxy Blogger - Server Side
